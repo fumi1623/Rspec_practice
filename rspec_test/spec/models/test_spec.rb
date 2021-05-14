@@ -371,49 +371,69 @@ require 'rails_helper'
 
 #----context の再利用: shared_context と include_context------------------------------------#
 
-class User
-  def initialize(name:, age:)
-    @name = name
-    @age = age
-  end
+# class User
+#   def initialize(name:, age:)
+#     @name = name
+#     @age = age
+#   end
 
-  def greet
-    if child?
-      "ぼくは#{@name}だよ。"
-    else
-      "僕は#{@name}です。"
-    end
-  end
+#   def greet
+#     if child?
+#       "ぼくは#{@name}だよ。"
+#     else
+#       "僕は#{@name}です。"
+#     end
+#   end
 
-  def child?
-    @age <= 12
+#   def child?
+#     @age <= 12
+#   end
+# end
+
+# RSpec.describe User do
+#   describe '#greet' do
+#     let(:user) { User.new(name: 'たろう', age: age) }
+#     subject { user.greet }
+#     context '12歳以下の場合' do
+#       let(:age) { 12 }
+#       it { is_expected.to eq 'ぼくはたろうだよ。' }
+#     end
+#     context '13歳以上の場合' do
+#       let(:age) { 13 }
+#       it { is_expected.to eq '僕はたろうです。' }
+#     end
+#   end
+
+#   describe '#child?' do
+#     let(:user) { User.new(name: 'たろう', age: age) }
+#     subject { user.child? }
+#     context '12歳以下の場合' do
+#       let(:age) { 12 }
+#       it { is_expected.to eq true }
+#     end
+#     context '13歳以上の場合' do
+#       let(:age) { 13 }
+#       it { is_expected.to eq false }
+#     end
+#   end
+# end
+
+#----遅延評価される let と事前に実行される let------------------------------------#
+
+RSpec.describe Blog do
+  let(:blog) { Blog.create(title: 'RSpec必勝法', content: 'あとで書く') }
+  before do
+    blog # ここでデータベースにレコードを保存する
+  end
+  it 'ブログの取得ができること' do
+    expect(Blog.first).to eq blog
   end
 end
 
-RSpec.describe User do
-  describe '#greet' do
-    let(:user) { User.new(name: 'たろう', age: age) }
-    subject { user.greet }
-    context '12歳以下の場合' do
-      let(:age) { 12 }
-      it { is_expected.to eq 'ぼくはたろうだよ。' }
-    end
-    context '13歳以上の場合' do
-      let(:age) { 13 }
-      it { is_expected.to eq '僕はたろうです。' }
-    end
-  end
-
-  describe '#child?' do
-    let(:user) { User.new(name: 'たろう', age: age) }
-    subject { user.child? }
-    context '12歳以下の場合' do
-      let(:age) { 12 }
-      it { is_expected.to eq true }
-    end
-    context '13歳以上の場合' do
-      let(:age) { 13 }
-      it { is_expected.to eq false }
-    end
+RSpec.describe Blog do
+  let!(:blog) { Blog.create(title: 'RSpec必勝法', content: 'あとで書く') }
+  it 'ブログの取得ができること' do
+    expect(Blog.first).to eq blog
   end
 end
+
