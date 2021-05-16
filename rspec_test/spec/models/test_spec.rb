@@ -420,20 +420,86 @@ require 'rails_helper'
 
 #----遅延評価される let と事前に実行される let------------------------------------#
 
-RSpec.describe Blog do
-  let(:blog) { Blog.create(title: 'RSpec必勝法', content: 'あとで書く') }
-  before do
-    blog # ここでデータベースにレコードを保存する
-  end
-  it 'ブログの取得ができること' do
-    expect(Blog.first).to eq blog
-  end
-end
+# RSpec.describe Blog do
+#   let(:blog) { Blog.create(title: 'RSpec必勝法', content: 'あとで書く') }
+#   before do
+#     blog # ここでデータベースにレコードを保存する
+#   end
+#   it 'ブログの取得ができること' do
+#     expect(Blog.first).to eq blog
+#   end
+# end
 
-RSpec.describe Blog do
-  let!(:blog) { Blog.create(title: 'RSpec必勝法', content: 'あとで書く') }
-  it 'ブログの取得ができること' do
-    expect(Blog.first).to eq blog
-  end
-end
+# RSpec.describe Blog do
+#   let!(:blog) { Blog.create(title: 'RSpec必勝法', content: 'あとで書く') }
+#   it 'ブログの取得ができること' do
+#     expect(Blog.first).to eq blog
+#   end
+# end
+
+
+#----動かないテストに保留マークを付ける: pending------------------------------------#
+
+# RSpec.describe '繊細なクラス' do
+#   it '繊細なテスト' do
+#     expect(1 + 2).to eq 3
+
+#     pending 'この先はなぜかテストが失敗するのであとで直す'  # パスしないエクスペクテーション（実行される）
+#     expect(foo).to eq bar
+#   end
+# end
+
+#----テストの実行を止める: skip------------------------------------#
+
+# RSpec.describe '何らかの理由で実行したくないクラス' do
+#   it '実行したくないテスト' do
+#     expect(1 + 2).to eq 3
+
+#     skip 'とりあえずここで実行を保留'  # ここから先は実行されない
+#     expect(foo).to eq bar
+#   end
+# end
+
+#----example全体をskipさせる: xit------------------------------------#
+
+# RSpec.describe '何らかの理由で実行したくないクラス' do
+#   xit '実行したくないテスト'do
+#     expect(1 + 2).to eq 3
+#     expect(foo).to eq bar
+#   end
+# end
+
+#----グループ全体をまとめてskipさせる: xdescribe / xcontext------------------------------------#
+
+# xdescribe '四則演算' do
+#   it '1 + 1 は 2 になること' do
+#     expect(1 + 1).to eq 2
+#   end
+#   it '10 - 1 は 9 になること' do
+#     expect(10 - 1).to eq 9
+#   end
+# end
+
+# # グループ全体をskipする
+# xcontext '管理者の場合' do
+#   it '社員情報を編集できる' do
+#     # ...
+#   end
+#   it '社員情報を削除できる' do
+#     # ...
+#   end
+# end
+
+#----テストはあとで書く: 中身の無い it------------------------------------#
+
+# RSpec.describe User do
+#   describe '#good_bye' do
+#     context '12歳以下の場合' do
+#       it 'ひらがなでさよならすること'
+#     end
+#     context '13歳以上の場合' do
+#       it '漢字でさよならすること'
+#     end
+#   end
+# end
 
